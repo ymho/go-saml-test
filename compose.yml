@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    hostname: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./proxy/nginx.conf:/etc/nginx/nginx.conf
+      - ./proxy/sites-available:/etc/nginx/sites-available
+      - ./proxy/cert:/etc/nginx/cert
+      - ./proxy/docker-entrypoint.d:/docker-entrypoint.d
+    depends_on:
+      - sp
+      - idp
+    networks:
+      - fed-common
+
+  idp:
+    build:
+      context: .
+      dockerfile: ./saml-idp/web/Dockerfile
+    hostname: idp
+    container_name: idp
+    expose:
+      - "80"
+    networks:
+      fed-common:
+        # aliases:
+        #   - idp.example.com
+  
+  sp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: sp
+    container_name: sp
+    expose:
+      - "80"
+    depends_on:
+      - idp
+    networks:
+      fed-common:
+        # aliases:
+        #   - sp.example.org
+  
+    restart: "always"
+
+networks:
+  fed-common:
+    external: true
