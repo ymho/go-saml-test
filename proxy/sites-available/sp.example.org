@@ -11,7 +11,7 @@ server {
     ssl_certificate /etc/nginx/cert/sp.example.org.crt;
     ssl_certificate_key /etc/nginx/cert/sp.example.org.pem;
     location / {
-        proxy_pass http://sp:80;
+        proxy_pass http://qnin-sp:80;
         #             proxy_redirect http:// https://;
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;

@@ -15,7 +15,7 @@ services:
       - ./proxy/cert:/etc/nginx/cert
       - ./proxy/docker-entrypoint.d:/docker-entrypoint.d
     depends_on:
-      - sp
+      # - sp
       - idp
     networks:
       - fed-common
@@ -33,22 +33,22 @@ services:
         # aliases:
         #   - idp.example.com
   
-  sp:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    hostname: sp
-    container_name: sp
-    expose:
-      - "80"
-    depends_on:
-      - idp
-    networks:
-      fed-common:
-        # aliases:
-        #   - sp.example.org
+  # sp:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   hostname: sp
+  #   container_name: sp
+  #   expose:
+  #     - "80"
+  #   depends_on:
+  #     - idp
+  #   networks:
+  #     fed-common:
+  #       # aliases:
+  #       #   - sp.example.org
   
-    restart: "always"
+  #   restart: "always"
 
 networks:
   fed-common:
